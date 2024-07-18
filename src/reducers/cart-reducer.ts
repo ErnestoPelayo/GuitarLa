@@ -2,7 +2,11 @@ import { db } from "../helpers/db";
 import { cartItem, guitarItem } from "../types";
 
 export type CartActions = 
-    { type: 'add-to-cart', payload: {item: guitarItem} }
+    { type: 'add-to-cart', payload: {item: guitarItem} } |
+    { type: 'increase-item', payload: {item: guitarItem['id']} } |
+    { type: 'decrease-item', payload: {item: guitarItem['id']} } |
+    { type: 'remove-item', payload: {item: guitarItem['id']} } |
+    { type: 'clear-cart' }
 
 export type CartState = {
     data: guitarItem[]
@@ -50,6 +54,46 @@ export const cartReducer = (
         return {
             ...state,
             cart: updatedCart
+        }
+    }
+    if(action.type === "increase-item"){
+        const itemExists = state.cart.find(guitar=>guitar.id === action.payload.item)
+        if(itemExists && itemExists.quantity<MAX_ITEMS){
+        let updatedCart : cartItem[] = []
+            updatedCart = state.cart.map(guitar=>guitar.id === action.payload.item ? {...guitar,quantity:guitar.quantity+1} : guitar )
+            return{
+                ...state,
+                cart:updatedCart
+            }
+        }
+    }
+    if(action.type === "decrease-item"){
+        const itemExists = state.cart.find(guitar=>guitar.id === action.payload.item)
+        if(itemExists && itemExists.quantity>MIN_ITEMS){
+        let updatedCart : cartItem[] = []
+            updatedCart = state.cart.map(guitar=>guitar.id === action.payload.item ? {...guitar,quantity:guitar.quantity-1} : guitar )
+            return{
+                ...state,
+                cart:updatedCart
+            }
+        }
+    }
+    if (action.type === "remove-item") {
+        const itemExists = state.cart.find(guitar => guitar.id === action.payload.item);
+        if (itemExists) {
+            const updatedCart = state.cart.filter(guitar => guitar.id !== action.payload.item);
+            return {
+                ...state,
+                cart: updatedCart
+            };
+        }
+    }
+    
+    if(action.type === "clear-cart") {
+
+        return {
+            ...state,
+            cart:[]
         }
     }
 
