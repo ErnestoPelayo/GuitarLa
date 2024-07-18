@@ -42,9 +42,9 @@ const Header = ({cart,dispatch}:HeaderProps) => {
                                         {
                                             cart.map((item)=>{
                                                 return (
-                                                    <tr>
+                                                    <tr key={item.id}>
                                                         <td>
-                                                            <img className="img-fluid" src={`./public/img/${item.image}.jpg`} alt="imagen guitarra" />
+                                                            <img className="img-fluid" src={`./img/${item.image}.jpg`} alt="imagen guitarra" />
                                                         </td>
                                                         <td>{item.name}</td>
                                                         <td className="fw-bold">
@@ -54,6 +54,7 @@ const Header = ({cart,dispatch}:HeaderProps) => {
                                                             <button
                                                                 type="button"
                                                                 className="btn btn-dark"
+                                                                onClick={()=>dispatch({type:"decrease-item", payload:{item:item.id}})}
                                                             >
                                                                 -
                                                             </button>
@@ -61,6 +62,7 @@ const Header = ({cart,dispatch}:HeaderProps) => {
                                                             <button
                                                                 type="button"
                                                                 className="btn btn-dark"
+                                                                onClick={()=>dispatch({type:"increase-item",payload:{item:item.id}})}
                                                             >
                                                                 +
                                                             </button>
@@ -69,19 +71,22 @@ const Header = ({cart,dispatch}:HeaderProps) => {
                                                             <button
                                                                 className="btn btn-danger"
                                                                 type="button"
+                                                                onClick={()=>dispatch({type:"remove-item",payload:{item:item.id}})}
                                                             >
                                                                 X
                                                             </button>
                                                         </td>
                                                     </tr>
                                                 )
-                                            })
-                                        
+                                        })
                                         }
                                     </tbody>
                                 </table>
                                 <p className="text-end">Total pagar: <span className="fw-bold">$899</span></p>
-                                <button className="btn btn-dark w-100 mt-3 p-2">Vaciar Carrito</button>
+                                <button 
+                                    className="btn btn-dark w-100 mt-3 p-2"
+                                    onClick={()=>dispatch({type:"clear-cart"})}
+                                >Vaciar Carrito</button>
                                 </>
                             }
                             
