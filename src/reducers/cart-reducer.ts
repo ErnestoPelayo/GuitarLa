@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { db } from "../helpers/db";
 import { cartItem, guitarItem } from "../types";
 
@@ -25,6 +26,7 @@ export const initialState : CartState = {
 
 const MIN_ITEMS = 1
 const MAX_ITEMS = 5
+
 
 export const cartReducer = (
         state: CartState = initialState,
